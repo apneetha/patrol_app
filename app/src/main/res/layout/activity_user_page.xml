@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".User_Page"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:background="@drawable/blurbackground">
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="vertical"
+       android:layout_marginTop="80dp">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        app:cardElevation="20dp"
+        app:cardCornerRadius="30dp"
+
+        android:background="@drawable/custom_edittext">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/user_preferences"
+            android:text="USER PREFERENCES"
+            android:textSize="18sp"
+            android:backgroundTint="@color/grey"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:cornerRadius = "20dp"
+            android:drawableRight="@drawable/ic_baseline_arrow_right_alt_24"
+            android:layout_gravity="center_horizontal"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        app:cardElevation="20dp"
+        app:cardCornerRadius="30dp"
+        android:background="@drawable/custom_edittext">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/user_settings"
+            android:text="USER SETTINGS"
+            android:textSize="18sp"
+            android:backgroundTint="@color/grey"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:cornerRadius = "20dp"
+            android:drawableRight="@drawable/ic_baseline_arrow_right_alt_24"
+            android:layout_gravity="center_horizontal"/>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        app:cardElevation="20dp"
+        app:cardCornerRadius="30dp"
+        android:background="@drawable/custom_edittext">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/user_information"
+            android:text="USER INFORMATION"
+            android:textSize="18sp"
+            android:backgroundTint="@color/grey"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:cornerRadius = "20dp"
+            android:drawableRight="@drawable/ic_baseline_arrow_right_alt_24"
+            android:layout_gravity="center_horizontal" />
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        app:cardElevation="20dp"
+        app:cardCornerRadius="30dp"
+        android:background="@drawable/custom_edittext">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/Home"
+            android:text="HOME"
+            android:textSize="18sp"
+            android:backgroundTint="@color/grey"
+            app:cornerRadius = "20dp"
+            android:drawableRight="@drawable/ic_baseline_arrow_right_alt_24"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_vertical|start"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:drawablePadding="40dp"
+            android:paddingStart="60dp"
+            />
+
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
+
+
+
+
+
+</LinearLayout>
