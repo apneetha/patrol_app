@@ -49,7 +49,7 @@ public class User_Page extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Create an Intent to start the new Activity
-                Intent intent = new Intent(User_Page.this, Home.class);
+                Intent intent = new Intent(User_Page.this, allow_page.class);
                 startActivity(intent);
             }
         });
