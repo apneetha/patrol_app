@@ -13,6 +13,7 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/profile", require("./routes/profile"));
 app.use("/api/historical_data", require("./routes/historial_data"));
 app.use("/api/v1/current_data", require("./routes/covid"));
+app.use("/api", require("./routes/flickr.js"));
 
 const PORT = process.env.PORT || 5001;
 
