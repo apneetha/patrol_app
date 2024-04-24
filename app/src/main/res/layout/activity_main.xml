@@ -11,6 +11,14 @@
     android:gravity="center"
     android:background="@drawable/login_background">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="32sp"
+        android:text="PATROL APP"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal" />
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -2,10 +2,20 @@ package com.example.patrol;
 
 import android.annotation.SuppressLint;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -45,9 +55,11 @@ import android.location.Location;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Handler;
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -65,6 +77,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap gmap;
@@ -80,6 +104,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private Button btnfindplaces;
 
     private final float DEFAULT_ZOOM = 18;
+
+    private String selectedCityName;
 
 
 
@@ -186,6 +212,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     return;
                 }
                 AutocompletePrediction selectedPrediction = predictionList.get(position);
+                selectedCityName = extractCityName(selectedPrediction.getFullText(null).toString());
+
+
                 String sugesstion = materialSearchBar.getLastSuggestions().get(position).toString();
                 materialSearchBar.setText(sugesstion);
 
@@ -242,11 +271,98 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         btnfindplaces.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MapActivity.this, GraphActivity.class);
-                startActivity(intent);
+                if (selectedCityName != null && !selectedCityName.isEmpty()) {
+                    Toast.makeText(MapActivity.this, "Selected City: " + selectedCityName, Toast.LENGTH_SHORT).show();
+                    fetchCityData(selectedCityName);
+
+                } else {
+                    Toast.makeText(MapActivity.this, "Please select a city", Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 
+
+
+    }
+
+    private String extractCityName(String address) {
+        // Split the address into components
+        String[] components = address.split(",");
+        // The city name is usually the last component
+        return components[components.length - 3].trim();
+    }
+
+    private void fetchCityData(String cityName) {
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "http://10.0.2.2:5001/api/v1/current_data"; // Adjust this as necessary
+
+
+        // Add the city name as a query parameter
+        Uri.Builder builder = Uri.parse(url).buildUpon();
+        builder.appendQueryParameter("date", "2020-04-07");
+        builder.appendQueryParameter("country", "USA");
+        builder.appendQueryParameter("city", cityName);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, builder.toString(),
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject responseObject = new JSONObject(response);
+                            JSONArray dataArray = responseObject.getJSONArray("data");
+                            if (dataArray.length() > 0) {
+                                JSONObject dataObject = dataArray.getJSONObject(0);
+                                Intent intent = new Intent(MapActivity.this, GraphActivity.class);
+                                intent.putExtra("confirmed_diff", dataObject.getInt("confirmed_diff"));
+                                intent.putExtra("confirmed", dataObject.getInt("confirmed"));
+                                intent.putExtra("deaths", dataObject.getInt("deaths"));
+                                intent.putExtra("city_name", dataObject.getString("name"));
+                                startActivity(intent);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(MapActivity.this, "Parsing error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Handle error
+                String message = "Error: ";
+                if (error instanceof NetworkError) {
+                    message += "Network error";
+                } else if (error instanceof ServerError) {
+                    message += "Server error";
+                } else if (error instanceof AuthFailureError) {
+                    message += "Auth error";
+                } else if (error instanceof ParseError) {
+                    message += "Parse error";
+                } else if (error instanceof NoConnectionError) {
+                    message += "No connection";
+                } else if (error instanceof TimeoutError) {
+                    message += "Timeout error";
+                }
+
+                if (error.networkResponse != null && error.networkResponse.data != null) {
+                    message += " - " + new String(error.networkResponse.data);
+                }
+
+                Toast.makeText(MapActivity.this, message, Toast.LENGTH_LONG).show();
+            }
+        });
+
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000, // Timeout in milliseconds.
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, // Number of retries
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)); // Backoff multiplier
+
+
+
+        // Add the request to the RequestQueue.
+                queue.add(stringRequest);
     }
 
 
