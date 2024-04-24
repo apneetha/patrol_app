@@ -3,6 +3,7 @@ const axios = require("axios");
 const router = express.Router();
 const auth = require("../middleware/auth");
 const { TwitterApi } = require("twitter-api-v2");
+const geocoder = require("../utils/geocoder");
 
 router.get("/twitter", auth, async (req, res) => {
 	try {

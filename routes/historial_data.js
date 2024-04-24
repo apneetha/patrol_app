@@ -2,10 +2,8 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", (req, res) => {
-	// busy_hours(
-	// 	"ChIJ7aVxnOTHwoARxKIntFtakKo",
-	// 	"AIzaSyCKaXv_I0ZG33qyfjZt7oKTPjupbPZxjlQ"
-	// ).then((data) => {
+	// busy_hours()
+	// .then((data) => {
 	//})
 	res.send({
 		name: "Central Library",
